@@ -61,27 +61,27 @@ TOML_TEMPLATE = """
 "ui.background" = { fg = "C3", bg = "C0" }
 "ui.cursor.match" = { fg = "C0", bg = "highlight", modifiers = ["bold"] }
 "ui.cursor.primary" = { fg = "C9", bg = "highlight2" }
-"ui.cursorline" = { bg = "C1" }
+"ui.cursorline" = { bg = "C2" }
 "ui.debug.breakpoint" = { fg = "C5" }
 "ui.debug.active" = { fg = "C9" }
 "ui.gutter" = { bg = "C0" }
-"ui.linenr" = { fg = "C2" }
-"ui.linenr.selected" = { fg = "C4", modifiers = ["bold"] }
-"ui.popup" = { fg = "C7", bg = "C1" }
-"ui.menu" = { fg = "C7", bg = "C1" }
-"ui.menu.selected" = { fg = "C9", bg = "C3" }
-"ui.help" = { fg = "C7", bg = "C1" }
+"ui.linenr" = { fg = "C1" }
+"ui.linenr.selected" = { fg = "C2", modifiers = ["bold"] }
+"ui.popup" = { fg = "C5", bg = "C0" }
+"ui.menu" = { fg = "C5", bg = "C0" }
+"ui.menu.selected" = { fg = "C5", bg = "C3" }
+"ui.help" = { fg = "C5", bg = "C0" }
 "ui.selection" = { fg = "C9", bg = "highlight" }
 "ui.selection.primary" = { fg = "C9", bg = "highlight2" }
-"ui.statusline" = { fg = "C7", bg = "C1" }
-"ui.statusline.inactive" = { fg = "C4", bg = "C0" }
-"ui.statusline.normal" = { fg = "C9", bg = "C2", modifiers = ["bold"] }
-"ui.statusline.insert" = { fg = "C9", bg = "C2", modifiers = ["bold"] }
-"ui.statusline.select" = { fg = "C9", bg = "C2", modifiers = ["bold"] }
-"ui.text" = { fg = "C7" }
+"ui.statusline" = { fg = "C5", bg = "C0" }
+"ui.statusline.inactive" = { fg = "C3", bg = "C0" }
+"ui.statusline.normal" = { fg = "C3", bg = "C0", modifiers = ["bold"] }
+"ui.statusline.insert" = { fg = "C3", bg = "C0", modifiers = ["bold"] }
+"ui.statusline.select" = { fg = "C3", bg = "C0", modifiers = ["bold"] }
+"ui.text" = { fg = "C5" }
 "ui.text.focus" = { fg = "C9", bg = "C3", modifiers = ["bold"] }
-"ui.virtual.indent-guide" = "C2"
-"ui.virtual.ruler" = { bg = "C1" }
+"ui.virtual.indent-guide" = "C1"
+"ui.virtual.ruler" = { bg = "C2" }
 "ui.virtual.whitespace" = "C3"
 "ui.window" = { fg = "C5" }
 
@@ -92,9 +92,9 @@ TOML_TEMPLATE = """
 "diagnostic.unnecessary" = { modifiers = ["dim"] }
 "diagnostic.deprecated" = { modifiers = ["crossed_out"] }
 
-"diff.plus" = { fg = "C9", modifiers = ["bold"] }
-"diff.delta" = { fg = "C9", modifiers = ["italic"] }
-"diff.minus" = { fg = "C9", modifiers = ["crossed_out"] }
+"diff.plus" = { fg = "C4", modifiers = ["bold"] }
+"diff.delta" = { fg = "C3", modifiers = ["italic"] }
+"diff.minus" = { fg = "C2", modifiers = ["crossed_out"] }
 
 ##PALETTE_PLACEHOLDER##
 """
