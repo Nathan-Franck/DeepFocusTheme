@@ -19,10 +19,13 @@ Unimportant:
 Source code is provided if you want to make your own flavor!
 
 #### Sunset
-![image](https://github.com/user-attachments/assets/693f007b-bc76-431d-a96c-1a95ba480495)
+![image](https://github.com/user-attachments/assets/48fbedae-07ea-444a-8fca-8879a8548ce3)
+
 #### Forest Sunset
-![image](https://github.com/user-attachments/assets/7d842b80-6079-47fd-9722-62d667b23c98)
+![image](https://github.com/user-attachments/assets/c4ca8218-9679-4d1f-9acf-6615b2a4bede)
+
 #### Tech Sunset
-![image](https://github.com/user-attachments/assets/85ee6a49-c504-4d1c-b2d5-f44d9abaee9c)
+![image](https://github.com/user-attachments/assets/93ea3955-21c7-4f31-bd86-5e99b17f5b0b)
+
 #### Cyberpunk Matrix
-![image](https://github.com/user-attachments/assets/d47880af-f397-45c3-be6b-d890b80cb212)
+![image](https://github.com/user-attachments/assets/ecc146dd-1870-49ee-a477-a02e8c601550)
