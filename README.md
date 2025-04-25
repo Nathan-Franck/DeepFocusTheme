@@ -1,6 +1,6 @@
 ## Deep Focus Theme
 
-A theme maximizing control flow and data awareness.
+A theme maximizing control and data flow awareness.
 
 *Generally I want to be able to see broadly where my data is going and what my program is doing in stark relief, and if I want to learn more about the particulars of variable types, or where things come from, I will focus more narrowly to read all the text. The most colorful eye-catching element should be my cursor and changes, not the text!*
 
