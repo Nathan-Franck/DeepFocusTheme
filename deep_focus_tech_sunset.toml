@@ -87,14 +87,14 @@
 "diff.minus" = { fg = "C2", modifiers = ["crossed_out"] }
 
 [palette]
-C0 = "#373a3a"
-C1 = "#5c6c68"
-C2 = "#6f9284"
-C3 = "#79b590"
-C4 = "#7cd689"
-C5 = "#a4e29a"
-C6 = "#cce4bf"
-C7 = "#e3eada"
+C0 = "#232424"
+C1 = "#53625f"
+C2 = "#6a8c7e"
+C3 = "#75b08c"
+C4 = "#7ad287"
+C5 = "#a0e196"
+C6 = "#cae3bc"
+C7 = "#e2e9d8"
 C8 = "#f2f3ee"
 C9 = "#ffffff"
 highlight = "#26d826"

@@ -119,15 +119,15 @@ def lerp_hue(h1, h2, t):
   interpolated_hue = h1 + diff * t
   return interpolated_hue % 1.0
 
-def hsl_to_hex(h, s, l, power = 1):
+def hsl_to_hex(h, s, l, gamma = 1):
   """Converts HSL (0-1 range) to a hex color string."""
   h = max(0.0, min(1.0, h))
   s = max(0.0, min(1.0, s))
   l = max(0.0, min(1.0, l))
   r, g, b = colorsys.hls_to_rgb(h, l, s)
-  r = pow(r, power)
-  g = pow(g, power)
-  b = pow(b, power)
+  r = pow(r, gamma)
+  g = pow(g, gamma)
+  b = pow(b, gamma)
   r = int(max(0, min(255, r * 255)))
   g = int(max(0, min(255, g * 255)))
   b = int(max(0, min(255, b * 255)))
@@ -140,13 +140,14 @@ def generate_linear_palette(
     light_hue_deg,
     mid_hue_deg,
     dark_hue_deg,
-    white_brightness=0.95,
-    dark_brightness=0.05,
+    white_brightness=0.95, # Corresponds to C<N-1>
+    dark_brightness=0.05,  # Corresponds to C0
     min_saturation=0.1,
     max_saturation=0.6,
     num_colors=10,
     highlight_saturation_scale=0.7,
-    highlight_lightness=0.5
+    highlight_lightness=0.5,
+    gamma_correction=0.5 # Gamma correction factor, default for dark themes
 ):
   """
   Generates a palette dictionary C0..C<N-1>, highlight, highlight2.
@@ -165,10 +166,13 @@ def generate_linear_palette(
 
   for i in range(num_colors):
     t = i / (num_colors - 1)
+    # Interpolate lightness between dark_brightness (C0) and white_brightness (C<N-1>)
     l = lerp(dark_brightness, white_brightness, t)
+    # Saturation peaks in the middle of the range
     peak_factor = 1.0 - 2.0 * abs(t - 0.5)
     s = lerp(min_saturation, max_saturation, peak_factor)
 
+    # Interpolate hue in two stages: light->mid and mid->dark
     if t <= 0.5:
       hue_t = t * 2.0
       h = lerp_hue(h_light, h_mid, hue_t)
@@ -176,17 +180,21 @@ def generate_linear_palette(
       hue_t = (t - 0.5) * 2.0
       h = lerp_hue(h_mid, h_dark, hue_t)
 
-    palette[f"C{i}"] = hsl_to_hex(h, s, l, 0.5)
+    # Apply gamma correction during HSL to Hex conversion
+    palette[f"C{i}"] = hsl_to_hex(h, s, l, gamma=gamma_correction)
 
+  # Generate highlight colors (using the original gamma correction for consistency)
   palette["highlight"] = hsl_to_hex(
       h_mid,
       highlight_saturation_scale,
-      highlight_lightness
+      highlight_lightness,
+      gamma=1
   )
   palette["highlight2"] = hsl_to_hex(
       lerp_hue(h_dark, (dark_hue_deg + 20) / 360.0, 0.5),
       highlight_saturation_scale * 0.8,
-      highlight_lightness * 0.9
+      highlight_lightness * 0.9,
+      gamma=1
   )
   return palette
 
@@ -203,7 +211,9 @@ def sanitize_filename(name):
 def format_palette_section(palette):
   """Formats just the palette key-value pairs for TOML insertion."""
   lines = ["[palette]"] # Start with the section header
+  # Sort C0, C1, ... CN-1 numerically
   color_keys = sorted([k for k in palette if k.startswith("C")], key=lambda x: int(x[1:]))
+  # Sort highlight, highlight2 alphabetically
   highlight_keys = sorted([k for k in palette if k.startswith("highlight")])
 
   for key in color_keys + highlight_keys:
@@ -212,70 +222,104 @@ def format_palette_section(palette):
 
 # --- Define Palette Parameters ---
 
-# Sunset Palette
+# Note: white_brightness corresponds to C9, dark_brightness to C0 in a 10-color palette
+
+# Sunset Palette (Dark)
 sunset_params = {
-    "name": "Sunset", # Simplified name for filename
-    "light_hue_deg": 220,
-    "mid_hue_deg": 30,
-    "dark_hue_deg": 280,
-    "white_brightness": 1,
-    "dark_brightness": 0.05,
+    "name": "Sunset",
+    "light_hue_deg": 220, # Hue for C9 (brightest)
+    "mid_hue_deg": 30,    # Hue around C4/C5
+    "dark_hue_deg": 280,  # Hue for C0 (darkest)
+    "white_brightness": 1.0, # Lightness of C9
+    "dark_brightness": 0.02, # Lightness of C0
     "min_saturation": 0.10,
     "max_saturation": 0.30,
     "highlight_saturation_scale": 0.6,
-    "highlight_lightness": 0.55
+    "highlight_lightness": 0.55,
+    "gamma_correction": 0.5 # Gamma correction for dark bg
 }
 
-# Tech Sunset Palette
+# Tech Sunset Palette (Dark)
 tech_sunset_params = {
     "name": "Tech Sunset",
     "light_hue_deg": 180,
     "mid_hue_deg": 120,
     "dark_hue_deg": 60,
-    "white_brightness": 1,
-    "dark_brightness": 0.05,
+    "white_brightness": 1.0,
+    "dark_brightness": 0.02,
     "min_saturation": 0.05,
     "max_saturation": 0.55,
     "highlight_saturation_scale": 0.7,
-    "highlight_lightness": 0.5
+    "highlight_lightness": 0.5,
+    "gamma_correction": 0.5
 }
 
-# Forest Sunset Palette
+# Forest Sunset Palette (Dark)
 forest_sunset_params = {
     "name": "Forest Sunset",
     "light_hue_deg": 40,
     "mid_hue_deg": 100,
     "dark_hue_deg": 25,
-    "white_brightness": 1,
-    "dark_brightness": 0.05,
+    "white_brightness": 1.0,
+    "dark_brightness": 0.02,
     "min_saturation": 0.08,
     "max_saturation": 0.30,
     "highlight_saturation_scale": 0.5,
-    "highlight_lightness": 0.45
+    "highlight_lightness": 0.45,
+    "gamma_correction": 0.5
 }
 
-# Cyberpunk Matrix Palette
+# Cyberpunk Matrix Palette (Dark)
 cyberpunk_params = {
     "name": "Cyberpunk Matrix",
     "light_hue_deg": 210,
     "mid_hue_deg": 275,
     "dark_hue_deg": 185,
-    "white_brightness": 1,
-    "dark_brightness": 0.06,
+    "white_brightness": 1.0,
+    "dark_brightness": 0.02,
     "min_saturation": 0.15,
     "max_saturation": 0.65,
     "highlight_saturation_scale": 0.8,
-    "highlight_lightness": 0.55
+    "highlight_lightness": 0.55,
+    "gamma_correction": 0.5
 }
 
 # --- Generate and Save Full Theme Files ---
 
-palettes_to_generate = [
+dark_palettes_params = [
     sunset_params,
     forest_sunset_params,
     tech_sunset_params,
     cyberpunk_params
 ]
+
+# --- Generate Light Mode Variants ---
+light_palettes_params = []
+for params in dark_palettes_params:
+    light_params = params.copy() # Create a copy to modify
+
+    # --- Resolve TODO: swap the white_brightness and dark_brightness ---
+    # For light themes, C0 should be light and C9 should be dark.
+    original_white_brightness = params['white_brightness']
+    original_dark_brightness = params['dark_brightness']
+    light_params['white_brightness'] = original_dark_brightness # C9 is now dark
+    light_params['dark_brightness'] = original_white_brightness # C0 is now light
+    # --- End Resolve TODO ---
+
+    # Adjust name
+    light_params['name'] = params['name'] + " Light"
+
+    # Adjust gamma correction for light backgrounds
+    light_params['gamma_correction'] = 0.7
+    light_params['max_saturation'] = min(1, light_params['max_saturation'] * 1.5)
+
+    # Example: Slightly desaturate and brighten highlights for better contrast on black font
+    light_params['highlight_lightness'] = min(1, params['highlight_lightness'] * 2) # Make highlights brighter
+
+    light_palettes_params.append(light_params)
+
+# Combine dark and light theme parameters into one list
+all_palettes_params = dark_palettes_params + light_palettes_params
 
 # Optional: Create the output directory if it doesn't exist
 output_dir = "." # Save in the current directory
@@ -284,11 +328,12 @@ output_dir = "." # Save in the current directory
 
 print("Generating theme files...")
 
-for params in palettes_to_generate:
-  # Generate the color data
+# Iterate over ALL parameter sets (dark and light)
+for params in all_palettes_params:
+  # Generate the color data using the specific parameters for this theme
   generated_palette = generate_linear_palette(**params)
 
-  # Create a clean filename
+  # Create a clean filename based on the theme's name
   base_filename = sanitize_filename(params['name'])
   output_filename = f"deep_focus_{base_filename}.toml"
   output_path = os.path.join(output_dir, output_filename)
