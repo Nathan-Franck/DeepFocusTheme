@@ -119,12 +119,15 @@ def lerp_hue(h1, h2, t):
   interpolated_hue = h1 + diff * t
   return interpolated_hue % 1.0
 
-def hsl_to_hex(h, s, l):
+def hsl_to_hex(h, s, l, power = 1):
   """Converts HSL (0-1 range) to a hex color string."""
   h = max(0.0, min(1.0, h))
   s = max(0.0, min(1.0, s))
   l = max(0.0, min(1.0, l))
   r, g, b = colorsys.hls_to_rgb(h, l, s)
+  r = pow(r, power)
+  g = pow(g, power)
+  b = pow(b, power)
   r = int(max(0, min(255, r * 255)))
   g = int(max(0, min(255, g * 255)))
   b = int(max(0, min(255, b * 255)))
@@ -173,7 +176,7 @@ def generate_linear_palette(
       hue_t = (t - 0.5) * 2.0
       h = lerp_hue(h_mid, h_dark, hue_t)
 
-    palette[f"C{i}"] = hsl_to_hex(h, s, l)
+    palette[f"C{i}"] = hsl_to_hex(h, s, l, 0.5)
 
   palette["highlight"] = hsl_to_hex(
       h_mid,
@@ -215,7 +218,7 @@ sunset_params = {
     "light_hue_deg": 220,
     "mid_hue_deg": 30,
     "dark_hue_deg": 280,
-    "white_brightness": 0.95,
+    "white_brightness": 1,
     "dark_brightness": 0.05,
     "min_saturation": 0.10,
     "max_saturation": 0.30,
@@ -229,7 +232,7 @@ tech_sunset_params = {
     "light_hue_deg": 180,
     "mid_hue_deg": 120,
     "dark_hue_deg": 60,
-    "white_brightness": 0.95,
+    "white_brightness": 1,
     "dark_brightness": 0.05,
     "min_saturation": 0.05,
     "max_saturation": 0.55,
@@ -243,7 +246,7 @@ forest_sunset_params = {
     "light_hue_deg": 40,
     "mid_hue_deg": 100,
     "dark_hue_deg": 25,
-    "white_brightness": 0.90,
+    "white_brightness": 1,
     "dark_brightness": 0.05,
     "min_saturation": 0.08,
     "max_saturation": 0.30,
@@ -257,7 +260,7 @@ cyberpunk_params = {
     "light_hue_deg": 210,
     "mid_hue_deg": 275,
     "dark_hue_deg": 185,
-    "white_brightness": 0.95,
+    "white_brightness": 1,
     "dark_brightness": 0.06,
     "min_saturation": 0.15,
     "max_saturation": 0.65,
@@ -274,8 +277,8 @@ palettes_to_generate = [
     cyberpunk_params
 ]
 
-output_dir = "." # Save in the current directory
 # Optional: Create the output directory if it doesn't exist
+output_dir = "." # Save in the current directory
 # if not os.path.exists(output_dir):
 #     os.makedirs(output_dir)
 
